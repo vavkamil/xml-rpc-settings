@@ -4,7 +4,7 @@
  * Plugin Name:       XML-RPC Settings
  * Plugin URI:        https://github.com/vavkamil/xml-rpc-settings
  * Description:       Configure XML-RPC methods to increase the security of your website.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            @vavkamil
  * Author URI:        https://vavkamil.cz
  * License:           GPL v2 or later
@@ -103,7 +103,7 @@ function xmlrpc_settings_options_page_html() {
 
             <?php settings_fields( 'xml-rpc-settings-group' ); ?>
             <table class="form-table">
-                <tr><td colspan="100%"><hr><strong>Build-in features, which could be used for malicious purposes, and cannot be disabled by default.</strong></td></tr>
+                <tr><td colspan="100%"><hr><strong>Build-in features could be used for malicious purposes and cannot be disabled by default.</strong></td></tr>
                 <!--
                 ////////////////////////////////////////////////////////////////////////////////////////////////////
                 // Disable GET access:

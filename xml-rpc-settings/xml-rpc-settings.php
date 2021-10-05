@@ -4,7 +4,7 @@
  * Plugin Name:       XML-RPC Settings
  * Plugin URI:        https://github.com/vavkamil/xml-rpc-settings
  * Description:       Configure XML-RPC methods to increase the security of your website.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Author:            @vavkamil
  * Author URI:        https://vavkamil.cz
  * License:           GPL v2 or later
@@ -33,15 +33,15 @@ function xmlrpc_settings_options_page() {
 }
 
 // Add link to settings from plugins page
-add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'add_plugin_page_settings_link');
-function add_plugin_page_settings_link( $links ) {
+add_filter('plugin_action_links_'.plugin_basename(__FILE__), 'xmlrpc_settings_add_plugin_page_settings_link');
+function xmlrpc_settings_add_plugin_page_settings_link( $links ) {
     $links[] = '<a href="' .
         admin_url( 'options-general.php?page=xml-rpc-settings' ) .
         '">' . __('Settings') . '</a>';
     return $links;
 }
 
-function register_settings() {
+function xmlrpc_settings_register_settings() {
     //register our settings
 
     // Disable GET access:
@@ -271,7 +271,7 @@ function xmlrpc_settings_options_page_html() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Disable GET access:
 
-function disable_get_access( $methods ) {
+function xmlrpc_settings_disable_get_access( $methods ) {
     global $pagenow; // get current page
 
     // Block GET requests
@@ -284,7 +284,7 @@ function disable_get_access( $methods ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Disable system.multicall:
 
-function disable_xmlrpc_multicall( $methods ) {
+function xmlrpc_settings_disable_xmlrpc_multicall( $methods ) {
     global $pagenow; // get current page
 
     // Block POST request that matches system.multicall
@@ -297,14 +297,14 @@ function disable_xmlrpc_multicall( $methods ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Disable system.listMethods:
 
-function disable_xmlrpc_listmethods( $methods ) {
+function xmlrpc_settings_disable_xmlrpc_listmethods( $methods ) {
     return [];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Disable authenticated methods:
 
-function disable_xmlrpc_auth( $methods ) {
+function xmlrpc_settings_disable_xmlrpc_auth( $methods ) {
     // add_filter( 'xmlrpc_enabled', '__return_false' );
 
     foreach ($methods as $method) {
@@ -325,7 +325,7 @@ function disable_xmlrpc_auth( $methods ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Disable pingbacks:
 
-function disable_xmlrpc_pingbacks( $methods ) {
+function xmlrpc_settings_disable_xmlrpc_pingbacks( $methods ) {
     unset( $methods["pingback.extensions.getPingbacks"]);
     unset( $methods["pingback.ping"]);
 
@@ -335,7 +335,7 @@ function disable_xmlrpc_pingbacks( $methods ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Remove X-Pingback header:
 
-function disable_xmlrpc_header( $headers ) {
+function xmlrpc_settings_disable_xmlrpc_header( $headers ) {
    unset( $headers['X-Pingback'] );
 
    return $headers;
@@ -344,7 +344,7 @@ function disable_xmlrpc_header( $headers ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Hide WordPress version when verifying pingbacks:
 
-function disable_xmlrpc_verify_agent( $http_request ) {
+function xmlrpc_settings_disable_xmlrpc_verify_agent( $http_request ) {
     if(preg_match('/verifying pingback from/', $http_request['user-agent'])) {
                 $http_request['user-agent'] = preg_replace("/WordPress\/(.*?);/", "WordPress/0.0.0;", $http_request['user-agent']);
     }
@@ -355,14 +355,14 @@ function disable_xmlrpc_verify_agent( $http_request ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Hide WordPress version when sending pingbacks:
 
-function disable_xmlrpc_send_agent( $methods ) {
-    #
+function xmlrpc_settings_disable_xmlrpc_send_agent( $methods ) {
+    # TODO
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Disable Demo API:
 
-function disable_xmlrpc_demo( $methods ) {
+function xmlrpc_settings_disable_xmlrpc_demo( $methods ) {
     unset( $methods["demo.addTwoNumbers"] );
     unset( $methods["demo.sayHello"] );
 
@@ -372,7 +372,7 @@ function disable_xmlrpc_demo( $methods ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Disable Blogger API:
 
-function disable_xmlrpc_blogger( $methods ) {
+function xmlrpc_settings_disable_xmlrpc_blogger( $methods ) {
     foreach ($methods as $method) {
         if(substr( $method, 0, 13 ) === "this:blogger_") {
             $method2 = substr($method, 5);
@@ -387,7 +387,7 @@ function disable_xmlrpc_blogger( $methods ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Disable MetaWeblog API:
 
-function disable_xmlrpc_metaweblog( $methods ) {
+function xmlrpc_settings_disable_xmlrpc_metaweblog( $methods ) {
     foreach ($methods as $method) {
         if(substr( $method, 0, 8 ) === "this:mw_") {
             $method2 = substr($method, 5);
@@ -405,7 +405,7 @@ function disable_xmlrpc_metaweblog( $methods ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Disable MovableType API:
 
-function disable_xmlrpc_movabletype( $methods ) {
+function xmlrpc_settings_disable_xmlrpc_movabletype( $methods ) {
     foreach ($methods as $method) {
         if(substr( $method, 0, 8 ) === "this:mt_") {
             $method2 = substr($method, 5);
@@ -420,14 +420,14 @@ function disable_xmlrpc_movabletype( $methods ) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Allow XML-RPC only for:
 
-function xmlrpc_allowed_ip( $methods ) {
+function xmlrpc_settings_xmlrpc_allowed_ip( $methods ) {
     $addresses = get_option('allowed_ip');
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Add message to XML-RPC methods:
 
-function xmlrpc_methods_message( $methods ) {
+function xmlrpc_settings_xmlrpc_methods_message( $methods ) {
     $message = get_option('methods_message');
     array_push($methods[$message]);
     $methods[$message] = $message;
@@ -437,77 +437,77 @@ function xmlrpc_methods_message( $methods ) {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function disable_xmlrpc_onpage_load(){
+function xmlrpc_settings_disable_xmlrpc_onpage_load(){
     // Disable GET access:
     if(esc_attr(get_option('allow_disallow_get_access')) == 'disallow') {
-        add_filter('xmlrpc_methods', 'disable_get_access');
+        add_filter('xmlrpc_methods', 'xmlrpc_settings_disable_get_access');
     }
     // Disable system.multicall:
     if(esc_attr(get_option('allow_disallow_multicall')) == 'disallow') {
-        add_filter('xmlrpc_methods', 'disable_xmlrpc_multicall');
+        add_filter('xmlrpc_methods', 'xmlrpc_settings_disable_xmlrpc_multicall');
     }
 
     // Disable system.listMethods:
     if(esc_attr(get_option('allow_disallow_listmethods')) == 'disallow') {
-        add_filter('xmlrpc_methods', 'disable_xmlrpc_listmethods');
+        add_filter('xmlrpc_methods', 'xmlrpc_settings_disable_xmlrpc_listmethods');
     }
 
     // Disable authenticated methods:
     if(esc_attr( get_option('allow_disallow_auth')) == 'disallow') {
-        add_filter('xmlrpc_methods', 'disable_xmlrpc_auth');
+        add_filter('xmlrpc_methods', 'xmlrpc_settings_disable_xmlrpc_auth');
     }
 
     // Disable pingbacks:
     if(esc_attr( get_option('allow_disallow_pingbacks')) == 'disallow') {
-        add_filter('xmlrpc_methods', 'disable_xmlrpc_pingbacks');
+        add_filter('xmlrpc_methods', 'xmlrpc_settings_disable_xmlrpc_pingbacks');
     }
 
     // Remove X-Pingback header:
     if(esc_attr( get_option('allow_disallow_header')) == 'disallow') {
-        add_filter('wp_headers', 'disable_xmlrpc_header');
+        add_filter('wp_headers', 'xmlrpc_settings_disable_xmlrpc_header');
     }
 
     // Hide WordPress version when verifying pingbacks:
     if(esc_attr( get_option('allow_disallow_verify_agent')) == 'disallow') {
-        add_filter('http_request_args', 'disable_xmlrpc_verify_agent');
+        add_filter('http_request_args', 'xmlrpc_settings_disable_xmlrpc_verify_agent');
     }
 
     // Hide WordPress version when sending pingbacks:
     if(esc_attr( get_option('allow_disallow_send_agent')) == 'disallow') {
-        add_filter('http_request_args', 'disable_xmlrpc_send_agent');
+        add_filter('http_request_args', 'xmlrpc_settings_disable_xmlrpc_send_agent');
     }
 
     // Disable Demo API:
     if(esc_attr( get_option('allow_disallow_demo')) == 'disallow' ) {
-        add_filter('xmlrpc_methods', 'disable_xmlrpc_demo');
+        add_filter('xmlrpc_methods', 'xmlrpc_settings_disable_xmlrpc_demo');
     }
 
     // Disable Blogger API:
     if(esc_attr( get_option('allow_disallow_blogger')) == 'disallow' ) {
-        add_filter('xmlrpc_methods', 'disable_xmlrpc_blogger');
+        add_filter('xmlrpc_methods', 'xmlrpc_settings_disable_xmlrpc_blogger');
     }
 
     // Disable MetaWeblog API:
     if(esc_attr( get_option('allow_disallow_metaweblog')) == 'disallow' ) {
-        add_filter('xmlrpc_methods', 'disable_xmlrpc_metaweblog');
+        add_filter('xmlrpc_methods', 'xmlrpc_settings_disable_xmlrpc_metaweblog');
     }
 
     // Disable MovableType API:
     if(esc_attr( get_option('allow_disallow_movabletype')) == 'disallow' ) {
-        add_filter('xmlrpc_methods', 'disable_xmlrpc_movabletype');
+        add_filter('xmlrpc_methods', 'xmlrpc_settings_disable_xmlrpc_movabletype');
     }
 
     // Allow XML-RPC only for:
     if(esc_attr( get_option('allowed_ip')) !== '' ) {
-        add_filter('xmlrpc_methods', 'xmlrpc_allowed_ip');
+        add_filter('xmlrpc_methods', 'xmlrpc_settings_xmlrpc_allowed_ip');
     }
 
     // Add message to XML-RPC methods:
     if(esc_attr( get_option('methods_message')) !== '' ) {
-        add_filter('xmlrpc_methods', 'xmlrpc_methods_message');
+        add_filter('xmlrpc_methods', 'xmlrpc_settings_xmlrpc_methods_message');
     }
 
 
 }
 
-add_action('init', 'disable_xmlrpc_onpage_load');
+add_action('init', 'xmlrpc_settings_disable_xmlrpc_onpage_load');

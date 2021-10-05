@@ -4,7 +4,7 @@
  * Plugin Name:       XML-RPC Settings
  * Plugin URI:        https://github.com/vavkamil/xml-rpc-settings
  * Description:       Configure XML-RPC methods to increase the security of your website.
- * Version:           1.2.0
+ * Version:           1.2.1
  * Author:            @vavkamil
  * Author URI:        https://vavkamil.cz
  * License:           GPL v2 or later
@@ -29,7 +29,7 @@ function xmlrpc_settings_options_page() {
     add_options_page('XML-RPC Settings', 'XML-RPC Settings', 'manage_options', 'xml-rpc-settings', 'xmlrpc_settings_options_page_html');
 
     //call register settings function
-    add_action( 'admin_init', 'register_settings' );
+    add_action( 'admin_init', 'xmlrpc_settings_register_settings' );
 }
 
 // Add link to settings from plugins page

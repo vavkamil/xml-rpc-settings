@@ -4,7 +4,7 @@ Tags: security, xmlrpc, ddos, brute-force
 Requires at least: 3.9
 Requires PHP: 5.3
 Tested up to: 5.8
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ XML-RPC Settings
 1. The settings page is highly configurable, with a deep set of options available for each feature.
 
 == Changelog ==
+
+= 1.2.1 - October 05, 2021 =
+- Fix callback function to register settings
 
 = 1.2 - October 05, 2021 =
 - Add `xmlrpc_settings_` prefix to function names to be unique

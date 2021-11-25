@@ -74,7 +74,7 @@ Secure your website using the following steps to install XML-RPC Settings:
 
 = How does XML-RPC Settings protect sites from attackers? =
 
-The XML-RPC Settings plugin all allows you to configure XML-RPC methods to increase the security of your website. For example, you can easily disable Pingback methonds, which might be missued by attacks to launch DDoS attacks.
+The XML-RPC Settings plugin allows you to configure XML-RPC methods to increase the security of your website. For example, you can easily disable Pingback methods, which might be misused by attacks to launch DDoS attacks.
 
 == Screenshots ==
 
